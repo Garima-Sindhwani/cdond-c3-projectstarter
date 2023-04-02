@@ -150,8 +150,8 @@ jobs:
       # Checkout code from git
       - checkout
       # Add ssh keys with fingerprint
-      - add_ssh_keys:
-        fingerprints: ["53:ae:1b:d5:c2:60:05:49:32:c4:69:57:24:e0:0f:cf"]
+      - add_ssh_keys: 
+          fingerprints: ["53:ae:1b:d5:c2:60:05:49:32:c4:69:57:24:e0:0f:cf"]
       # attach workspace
       - attach_workspace:
           at: project/.circleci/ansible/
