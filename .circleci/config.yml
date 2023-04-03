@@ -197,15 +197,17 @@ jobs:
       # Here's where you will add some code to rollback on failure
   deploy-frontend:
     docker:
-      - image: circleci/node:13.8.0
-        user: root
+      - image: python:3.7-alpine3.11
     steps:
       - checkout
       - run: 
           name: install aws aws-cli
           command: |
-            apt get update
-            apt -y install awscli
+            apk add tar
+            apk add gzip
+            apk add npm
+            apk add nodejs
+            pip install awscli
       - run:
           name: Get backend url
           command: |
