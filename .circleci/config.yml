@@ -325,7 +325,7 @@ jobs:
               return 1
             fi
       # Here's where you will add some code to rollback on failure
-      - revert-migration
+      - revert-migrations
       - destroy-infrastructure
 
 workflows:
