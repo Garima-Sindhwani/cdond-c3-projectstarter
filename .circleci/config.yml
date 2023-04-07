@@ -211,9 +211,7 @@ jobs:
           command: |
             # Your code here
             cd backend
-            cat migrations_dump.txt 
-            cat migrations_dump.txt | grep "has been executed successfully."
-            cat migrations_dump.txt | grep "No migrations are pending" 
+            cat migrations_dump.txt
             if grep "has been executed successfully." migrations_dump.txt 
             then
               echo "insecure" >> ~/.curlrc
