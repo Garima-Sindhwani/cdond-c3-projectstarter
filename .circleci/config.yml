@@ -405,4 +405,6 @@ jobs:
 workflows:
   default:
     jobs:
-      - cleanup
+      - cloudfront-update
+      - cleanup:
+          requires: [cloudfront-update]
