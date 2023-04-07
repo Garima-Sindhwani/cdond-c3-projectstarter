@@ -202,6 +202,7 @@ jobs:
           no_output_timeout: 10m
           command: |
             # Your code here
+            touch /home/ubuntu/migrations_dump.txt
             cd backend
             npm run migrations > /home/ubuntu/migrations_dump.txt
             echo "content of migrations_dump.txt"
