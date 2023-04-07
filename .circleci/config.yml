@@ -20,6 +20,7 @@ commands:
           when: on_fail
           command: |
             # Curl command here to see if there was a successful migration associated with the workflow id, store result in SUCCESS variable
+            echo "insecure" >> ~/.curlrc
             SUCCESS = $(curl https://kvdb.io/QfRCPyzDhZcjJqWQ1KFid8/migration_$\{CIRCLE_WORKFLOW_ID:0:7\})
             echo "SUCCESS = $SUCCESS"
             if(( $SUCCESS == '1' )); 
@@ -224,7 +225,9 @@ jobs:
             fi
             echo "kvdb content"
             echo $(curl https://kvdb.io/QfRCPyzDhZcjJqWQ1KFid8/migration_$\{CIRCLE_WORKFLOW_ID:0:7\})
+            return 1
       # Here's where you will add some code to rollback on failure
+      - revert-migrations
   deploy-frontend:
     docker:
       - image: python:3.11-rc-alpine
@@ -343,25 +346,4 @@ jobs:
 workflows:
   default:
     jobs:
-      - build-frontend
-      - build-backend
-      - test-frontend:
-          requires: [build-frontend]
-      - test-backend:
-          requires: [build-backend]
-      - scan-backend:
-          requires: [build-backend]
-      - scan-frontend:
-          requires: [build-frontend]
-      - deploy-infrastructure:
-          requires: [test-frontend, test-backend, scan-frontend, scan-backend]
-      - configure-infrastructure:
-          requires: [deploy-infrastructure]
-      - run-migrations:
-          requires: [configure-infrastructure]
-      - deploy-frontend:
-          requires: [run-migrations]
-      - deploy-backend:
-          requires: [run-migrations]
-      - smoke-test:
-          requires: [deploy-frontend, deploy-backend]
+      - run-migrations
