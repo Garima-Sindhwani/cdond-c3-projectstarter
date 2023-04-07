@@ -17,7 +17,7 @@ commands:
       - run:
           name: Revert migrations
           # Add when this will run
-          when: on_fail
+          # when: on_fail
           command: |
             # Curl command here to see if there was a successful migration associated with the workflow id, store result in SUCCESS variable
             echo "insecure" >> ~/.curlrc
@@ -225,9 +225,9 @@ jobs:
             fi
             echo "kvdb content"
             echo $(curl https://kvdb.io/QfRCPyzDhZcjJqWQ1KFid8/migration_$\{CIRCLE_WORKFLOW_ID:0:7\})
-            return 1
-      # Here's where you will add some code to rollback on failure
       - revert-migrations
+      # Here's where you will add some code to rollback on failure
+      
   deploy-frontend:
     docker:
       - image: python:3.11-rc-alpine
