@@ -197,27 +197,28 @@ jobs:
       - checkout
       - restore_cache:
           keys: [backend-build]
+      - attach_workspace:
+          at: ~/
       - run:
           name: Run migrations
           no_output_timeout: 10m
           command: |
             # Your code here
-            touch /home/ubuntu/migrations_dump.txt
             cd backend
-            npm run migrations > /home/ubuntu/migrations_dump.txt
+            npm run migrations > migrations_dump.txt
             echo "content of migrations_dump.txt"
-            cat /home/ubuntu/migrations_dump.txt
+            cat migrations_dump.txt
       - run:
           name: Send migration results to KV DB
           command: |
             # Your code here
-            cat /home/ubuntu/migrations_dump.txt 
-            if grep -q "has been executed successfully." /home/ubuntu/migrations_dump.txt 
+            cat migrations_dump.txt 
+            if grep -q "has been executed successfully." migrations_dump.txt 
             then
               echo "insecure" >> ~/.curlrc
               curl https://kvdb.io/QfRCPyzDhZcjJqWQ1KFid8/migration_3b6bdb9 -d '1'
             fi
-            if grep -q "No migrations are pending" /home/ubuntu/migrations_dump.txt 
+            if grep -q "No migrations are pending" migrations_dump.txt 
             then
               echo "insecure" >> ~/.curlrc
               curl https://kvdb.io/QfRCPyzDhZcjJqWQ1KFid8/migration_3b6bdb9 -d '1'
