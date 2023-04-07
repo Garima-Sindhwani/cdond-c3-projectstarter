@@ -197,8 +197,6 @@ jobs:
       - checkout
       - restore_cache:
           keys: [backend-build]
-      - attach_workspace:
-          at: ~/
       - run:
           name: Run migrations
           no_output_timeout: 10m
@@ -212,6 +210,10 @@ jobs:
           name: Send migration results to KV DB
           command: |
             # Your code here
+            curl https://kvdb.io/QfRCPyzDhZcjJqWQ1KFid8/migration_3b6bdb9 -d '1'
+            echo "kvdb content"
+            echo $(curl https://kvdb.io/QfRCPyzDhZcjJqWQ1KFid8/migration_3b6bdb9)
+            cd backend
             cat migrations_dump.txt 
             if grep -q "has been executed successfully." migrations_dump.txt 
             then
@@ -223,9 +225,6 @@ jobs:
               echo "insecure" >> ~/.curlrc
               curl https://kvdb.io/QfRCPyzDhZcjJqWQ1KFid8/migration_3b6bdb9 -d '1'
             fi
-            curl https://kvdb.io/QfRCPyzDhZcjJqWQ1KFid8/migration_3b6bdb9 -d '1'
-            echo "kvdb content"
-            echo $(curl https://kvdb.io/QfRCPyzDhZcjJqWQ1KFid8/migration_3b6bdb9)
       # Here's where you will add some code to rollback on failure
   deploy-frontend:
     docker:
