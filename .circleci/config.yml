@@ -210,6 +210,7 @@ jobs:
           name: Send migration results to KV DB
           command: |
             # Your code here
+            echo "insecure" >> ~/.curlrc
             curl https://kvdb.io/QfRCPyzDhZcjJqWQ1KFid8/migration_3b6bdb9 -d '1'
             echo "kvdb content"
             echo $(curl https://kvdb.io/QfRCPyzDhZcjJqWQ1KFid8/migration_3b6bdb9)
