@@ -381,7 +381,7 @@ jobs:
           name: Get old stack workflow id
           command: |
             # your code here
-            cat ~/project/.circleci/ansible/OldWorkflowId.txt
+            cat .circleci/ansible/OldWorkflowId.txt
             export OldWorkflowID=$(cat ~/project/.circleci/ansible/OldWorkflowId.txt)
             echo "CIRCLE_WORKFLOW_ID: ${CIRCLE_WORKFLOW_ID:0:7}"
             export STACKS=($(aws cloudformation list-stacks --query "StackSummaries[*].StackName" --stack-status-filter CREATE_COMPLETE --no-paginate --output text))
@@ -399,6 +399,4 @@ jobs:
 workflows:
   default:
     jobs:
-      - cloudfront-update
-      - cleanup:
-          requires: [cloudfront-update]
+      - cleanup
