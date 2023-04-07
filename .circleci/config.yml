@@ -360,7 +360,7 @@ jobs:
             export OldWorkflowID=$(aws cloudformation list-exports --query "Exports[?name==WorkflowID].Value" --no-paginate --output text)
             echo "OldWorkflowID: ${OldWorkflowID}"
             echo "CIRCLE_WORKFLOW_ID: ${CIRCLE_WORKFLOW_ID:0:7}"
-            echo "${OldWorkflowID}" > .circleci/ansibleOldWorkflowId.txt
+            echo "${OldWorkflowID}" > .circleci/ansibleOld/WorkflowId.txt
             aws cloudformation deploy --template-file .circleci/files/cloudfront.yml --stack-name initialStack --parameter-overrides WorkflowID="udapeople-1125972" --tags project=udapeople
       - persist_to_workspace:
           root: ~/
@@ -381,7 +381,7 @@ jobs:
           name: Get old stack workflow id
           command: |
             # your code here
-            cat .circleci/ansible/OldWorkflowId.txt
+            cat project/.circleci/ansible/OldWorkflowId.txt
             export OldWorkflowID=$(cat ~/project/.circleci/ansible/OldWorkflowId.txt)
             echo "CIRCLE_WORKFLOW_ID: ${CIRCLE_WORKFLOW_ID:0:7}"
             export STACKS=($(aws cloudformation list-stacks --query "StackSummaries[*].StackName" --stack-status-filter CREATE_COMPLETE --no-paginate --output text))
@@ -399,4 +399,4 @@ jobs:
 workflows:
   default:
     jobs:
-      - cleanup
+      - cloudfront-update
