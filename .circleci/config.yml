@@ -354,7 +354,7 @@ jobs:
           name: Update cloudfront distribution
           command: |
               echo "CIRCLE_WORKFLOW_ID:0:7 = ${CIRCLE_WORKFLOW_ID:0:7}"
-              aws cloudformation deploy --template-file .circleci/files/cloudfront.yml --stack-name cloudFrontStack \
+              aws cloudformation deploy --template-file .circleci/files/cloudfront.yml --stack-name initialStack \
               --parameter-overrides WorkflowID="udapeople-${CIRCLE_WORKFLOW_ID:0:7}" --tags project=udapeople
       # Here's where you will add some code to rollback on failure
       - revert-migrations
@@ -363,27 +363,4 @@ jobs:
 workflows:
   default:
     jobs:
-      - build-frontend
-      - build-backend
-      - test-frontend:
-          requires: [build-frontend]
-      - test-backend:
-          requires: [build-backend]
-      - scan-backend:
-          requires: [build-backend]
-      - scan-frontend:
-          requires: [build-frontend]
-      - deploy-infrastructure:
-          requires: [test-frontend, test-backend, scan-frontend, scan-backend]
-      - configure-infrastructure:
-          requires: [deploy-infrastructure]
-      - run-migrations:
-          requires: [configure-infrastructure]
-      - deploy-frontend:
-          requires: [run-migrations]
-      - deploy-backend:
-          requires: [run-migrations]
-      - smoke-test:
-          requires: [deploy-frontend, deploy-backend]
-      - cloudfront-update:
-          requires: [smoke-test]
+      - cloudfront-update
