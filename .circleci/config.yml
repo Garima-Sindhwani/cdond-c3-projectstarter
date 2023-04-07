@@ -21,9 +21,10 @@ commands:
           command: |
             # Curl command here to see if there was a successful migration associated with the workflow id, store result in SUCCESS variable
             echo "insecure" >> ~/.curlrc
-            SUCCESS = $(curl https://kvdb.io/QfRCPyzDhZcjJqWQ1KFid8/migration_$\{CIRCLE_WORKFLOW_ID:0:7\})
-            echo "SUCCESS = $SUCCESS"
-            if(( $SUCCESS == '1' )); 
+            echo $(curl https://kvdb.io/QfRCPyzDhZcjJqWQ1KFid8/migration_$\{CIRCLE_WORKFLOW_ID:0:7\})
+            export success=$(curl https://kvdb.io/QfRCPyzDhZcjJqWQ1KFid8/migration_$\{CIRCLE_WORKFLOW_ID:0:7\})
+            echo "success = $success"
+            if(( $success == '1' )); 
             then
               cd ~/project/backend
               npm install
